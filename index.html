@@ -1,0 +1,484 @@
+<title>Alongside</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+/* Layout: one phone-width column. Scrolling main area, tab bar docked at the bottom, sheets slide over. */
+:root{
+  --bg:#EEF2F5; --surface:#FFFFFF; --ink:#15233B; --muted:#5A687F; --line:#D7DFE7;
+  --accent:#0B7A85; --accent-ink:#FFFFFF; --accent-soft:#D9EEF0;
+  --warn:#9A4A12; --warn-soft:#FBE8D6; --warn-card:#F6D9BC;
+  --alert:#B3261E; --alert-ink:#FFFFFF; --alert-soft:#FBE3E1;
+  --ok:#1D7443; --ok-soft:#DDF2E5;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"DM Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1626; --surface:#152238; --ink:#E7EDF6; --muted:#9BAABF; --line:#25344C;
+  --accent:#4DC2CD; --accent-ink:#04252A; --accent-soft:#12373E;
+  --warn:#F2A767; --warn-soft:#3A2614; --warn-card:#4A3016;
+  --alert:#E5645A; --alert-ink:#2A0A08; --alert-soft:#3E1B19;
+  --ok:#6FD39A; --ok-soft:#123322; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1626; --surface:#152238; --ink:#E7EDF6; --muted:#9BAABF; --line:#25344C;
+  --accent:#4DC2CD; --accent-ink:#04252A; --accent-soft:#12373E;
+  --warn:#F2A767; --warn-soft:#3A2614; --warn-card:#4A3016;
+  --alert:#E5645A; --alert-ink:#2A0A08; --alert-soft:#3E1B19;
+  --ok:#6FD39A; --ok-soft:#123322; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 var(--body);margin:0;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:1.75rem;font-weight:800}
+h2{font-size:1.25rem;font-weight:800}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.app{height:100%;display:flex;flex-direction:column;max-width:520px;margin:0 auto;background:var(--bg);border-inline:1px solid var(--line)}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain}
+.wrap{display:flex;flex-direction:column;gap:16px;padding-block:18px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stack{display:flex;flex-direction:column;gap:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:flex;align-items:center;gap:12px;min-width:0}
+.grow{flex:1;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 16px;font-weight:700;min-height:48px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.alert{background:var(--alert);border-color:var(--alert);color:var(--alert-ink)}
+.btn.ghost{background:transparent}
+.btn.small{min-height:40px;padding:8px 12px;font-size:.9rem}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.link{background:none;border:0;padding:8px 0;color:var(--accent);font-weight:700;text-align:left}
+.back{background:none;border:0;padding:4px 0;color:var(--accent);font-weight:700;align-self:flex-start;min-height:40px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field>span{font-size:.85rem;font-weight:700;color:var(--muted)}
+input[type=text],input[type=tel],input[type=time],input[type=date],input[type=datetime-local],select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;min-height:48px}
+textarea{min-height:110px;resize:vertical}
+.check-row{display:flex;gap:10px;align-items:center;min-height:44px}
+.check-row input{width:22px;height:22px;accent-color:var(--accent)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--line);border-radius:12px;padding:3px;gap:3px}
+.seg button{border:0;background:transparent;border-radius:10px;padding:10px;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 12px;font-size:.9rem;font-weight:500}
+.chip[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;padding:3px 7px;background:var(--accent-soft);color:var(--ink);white-space:nowrap}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.alert{background:var(--alert-soft);color:var(--alert)}
+.tag.sample{background:var(--line);color:var(--muted)}
+/* Today */
+.next{border-radius:20px;padding:20px;background:var(--accent);color:var(--accent-ink);display:flex;flex-direction:column;gap:10px}
+.next.lean{background:var(--warn-card);color:var(--ink)}
+.next .big{font-family:var(--display);font-weight:800;font-size:3rem;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.next .t{font-size:1.15rem;font-weight:700}
+.next .btn{background:var(--accent-ink);color:var(--accent);border-color:transparent;align-self:flex-start}
+.next.lean .btn{background:var(--surface);color:var(--ink)}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.task{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px 8px 8px}
+.check{width:44px;height:44px;border-radius:50%;border:2px solid var(--accent);background:transparent;display:grid;place-items:center;flex:none;color:var(--accent-ink)}
+.task.done .check{background:var(--accent)}
+.task.done .ttitle{text-decoration:line-through;color:var(--muted)}
+.tmain{flex:1;min-width:0;background:none;border:0;text-align:left;padding:6px 0;display:flex;flex-direction:column}
+.ttitle{font-weight:700;overflow-wrap:anywhere}
+.tmeta{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.banner{border-radius:12px;padding:12px 14px;background:var(--warn-soft);color:var(--ink);display:flex;gap:12px;align-items:center;justify-content:space-between}
+.banner.info{background:var(--accent-soft)}
+/* Emergency card */
+.ecard{border:2px solid var(--alert);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.ecard header{background:var(--alert);color:var(--alert-ink);padding:10px 16px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.ecard dl{margin:0;padding:8px 16px 16px;display:grid;gap:12px}
+.ecard dt{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ecard dd{margin:2px 0 0;overflow-wrap:anywhere;white-space:pre-line;font-weight:500}
+.ecard.big dd{font-size:1.2rem}
+.steps{display:flex;gap:6px}
+.steps i{flex:1;height:6px;border-radius:99px;background:var(--line)}
+.steps i.on{background:var(--accent)}
+/* Support */
+.credits{display:flex;align-items:baseline;gap:8px}
+.credits b{font-family:var(--display);font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;font-family:var(--display);font-weight:800;flex:none}
+.msgs{display:flex;flex-direction:column;gap:8px;min-height:180px}
+.msg{max-width:82%;padding:10px 12px;border-radius:14px;background:var(--surface);border:1px solid var(--line);overflow-wrap:anywhere}
+.msg.me{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.msg.sys{align-self:center;background:transparent;border:0;color:var(--muted);font-size:.85rem;text-align:center}
+.stars{display:flex;gap:6px}
+.stars button{width:48px;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-weight:800}
+.stars button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+/* Tab bar */
+.tabs{border-top:1px solid var(--line);background:var(--surface)}
+.tabs .in{display:grid;grid-template-columns:repeat(4,1fr);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+.tabs button{position:relative;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 10px;min-height:58px;font-size:.75rem;font-weight:700;color:var(--muted)}
+.tabs button[aria-current=page]{color:var(--accent)}
+.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dot{position:absolute;top:8px;left:calc(50% + 8px);width:9px;height:9px;border-radius:50%;background:var(--alert)}
+/* Sheets and toast */
+.sheet{position:fixed;inset:0;background:rgba(8,14,25,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.panel{width:100%;max-width:520px;max-height:92%;overflow-y:auto;background:var(--bg);border-radius:20px 20px 0 0;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
+.full{position:fixed;inset:0;z-index:30;background:var(--surface);overflow-y:auto;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;font-size:.9rem;z-index:40;max-width:min(92vw,440px);text-align:center}
+details.card summary{font-weight:700;cursor:pointer;min-height:28px}
+details.card p{margin-top:8px;color:var(--muted)}
+.opt{display:flex;gap:12px;text-align:left;align-items:flex-start;padding:14px;border-radius:var(--r);background:var(--surface);border:2px solid var(--line);width:100%}
+.opt[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft)}
+@media (prefers-reduced-motion:no-preference){.panel{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}}}
+</style>
+<div class="app" id="app"></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script>
+(function(){
+"use strict";
+var KEY="alongside-v1";
+var $=function(s){return document.querySelector(s)};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+var uid=function(){return Math.random().toString(36).slice(2,9)};
+var pad=function(n){return String(n).padStart(2,"0")};
+var dkey=function(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+var todayK=function(){return dkey(new Date())};
+var addDays=function(k,n){var p=k.split("-").map(Number);return dkey(new Date(p[0],p[1]-1,p[2]+n))};
+var dayLabel=function(k){var p=k.split("-").map(Number);return new Date(p[0],p[1]-1,p[2]).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})};
+var toM=function(t){var p=t.split(":");return +p[0]*60+ +p[1]};
+
+var TEMPLATES={
+  school:{label:"School morning",note:"Wake up, breakfast, school run",items:[["06:30","Wake up and get dressed",1],["07:00","Breakfast and pack bags",1],["07:30","School run",1]]},
+  homework:{label:"Homework hour",note:"Snack, then homework together",items:[["16:30","Snack and settle in",0],["17:00","Homework together",1]]},
+  bedtime:{label:"Bedtime",note:"Bath, story, lights out",items:[["19:30","Bath and pyjamas",0],["20:00","Story or quiet talk",1],["20:30","Lights out",1]]}
+};
+
+/* ---------- data: private state per person, shared community in the database ---------- */
+function blank(){return {onboarded:false,safetyOk:false,blockedIds:[],profile:{name:"",kids:[{name:"",age:""}],support:"",area:""},tasks:[],lean:{},
+  emergency:{done:false,myPhone:"",allergies:"",meds:"",doctor:"",school:"",schoolPhone:"",pickup:"",contacts:[],plan:"",checkinOn:false,every:"24",lastCheckIn:0,buddies:[]}}}
+function norm(o){var b=blank(),r={};Object.keys(b).forEach(function(k){r[k]=o&&o[k]!==undefined?o[k]:b[k]});
+  r.profile=Object.assign(blank().profile,o&&o.profile||{});r.emergency=Object.assign(blank().emergency,o&&o.emergency||{});
+  if(!Array.isArray(r.blockedIds))r.blockedIds=[];if(!Array.isArray(r.emergency.buddies))r.emergency.buddies=[];return r}
+function loadLocal(){try{var r=localStorage.getItem(KEY);if(r)return norm(JSON.parse(r))}catch(e){}return blank()}
+var S=blank();
+var DB=null,MY=null,ADM=false,offline=false,stateReady=false,autoApproved=false,STATE_PATH="";
+var C={members:{},posts:{},claims:{},msgs:{},checkins:{},approved:{},blocked:{},reports:{}};
+
+/*LOGIC*/
+function ageLine(kids){var n=kids.filter(function(k){return k.name.trim()||String(k.age).trim()}).length;if(!n)return "";
+  var ages=kids.map(function(k){return parseInt(k.age,10)}).filter(function(a){return !isNaN(a)});
+  var t=n+" child"+(n>1?"ren":"");if(ages.length)t+=", "+(ages.length>1?ages.slice(0,-1).join(", ")+" and "+ages[ages.length-1]:ages[0]);return t}
+function stable(v){if(Array.isArray(v))return "["+v.map(stable).join(",")+"]";
+  if(v&&typeof v==="object")return "{"+Object.keys(v).sort().map(function(k){return JSON.stringify(k)+":"+stable(v[k])}).join(",")+"}";return JSON.stringify(v)}
+function itemsOf(C,id){return (C.posts[id]||{}).items||[]}
+function allItems(C){var o=[];Object.keys(C.posts).forEach(function(id){itemsOf(C,id).forEach(function(it){o.push(Object.assign({},it,{owner:id}))})});return o}
+function approvedOf(C,id){return !!C.approved[id]&&!C.blocked[id]}
+function balanceOf(C,id){var b=3;allItems(C).forEach(function(it){
+  if(it.kind!=="request"||it.status!=="done"||!it.helperId||it.helperId===it.owner)return;
+  if(it.helperId===id)b+=it.credits;if(it.owner===id)b-=it.credits});return b}
+function ratingOf(C,id){var n=0,s=0;allItems(C).forEach(function(it){if(it.kind==="request"&&it.status==="done"&&it.helperId===id&&it.rating){n++;s+=it.rating}});return {n:n,avg:n?s/n:0}}
+function claimersOf(C,owner,itemId){return Object.keys(C.claims).filter(function(h){return approvedOf(C,h)&&((C.claims[h]||{}).items||[]).some(function(c){return c.ownerId===owner&&c.id===itemId&&!c.withdrawn})})}
+function claimOf(C,me,it){return ((C.claims[me]||{}).items||[]).find(function(c){return c.ownerId===it.owner&&c.id===it.id&&!c.withdrawn})}
+function nearby(C,me,blocked){var all=allItems(C),ok=function(it){return it.owner!==me&&approvedOf(C,it.owner)&&blocked.indexOf(it.owner)<0};
+  return {requests:all.filter(function(it){return it.kind==="request"&&it.status==="open"&&ok(it)&&(!it.toId||it.toId===me)}).sort(function(a,b){return (a.whenTs||0)-(b.whenTs||0)}),
+          offers:all.filter(function(it){return it.kind==="offer"&&ok(it)})}}
+function threadMsgs(C,it){var key=it.owner+"-"+it.id,m=[];[it.owner,it.helperId].forEach(function(p){if(!p)return;
+  (((C.msgs[p]||{}).t||{})[key]||[]).forEach(function(x){m.push({from:p,at:x.at,text:x.text})})});return m.sort(function(a,b){return a.at-b.at})}
+function overdue(C,me,now){return Object.keys(C.checkins).filter(function(id){var c=C.checkins[id];
+  return id!==me&&c&&c.on&&c.lastAt&&(c.buddies||[]).indexOf(me)>=0&&now-c.lastAt>c.every*3600000})}
+/*ENDLOGIC*/
+
+var lastFail=0;
+function fail(e){var n=Date.now();if(n-lastFail<4000)return;lastFail=n;toast(e&&e.code==="quota_exceeded"?"The shared database is full.":"Could not save. Check your connection.")}
+var wq={};
+function put(path,data){if(!DB)return;var q=wq[path]||(wq[path]={run:false,next:null});q.next=data;if(q.run)return;q.run=true;
+  (async function(){while(q.next){var d=q.next;q.next=null;try{await DB.doc(path).set(d)}catch(e){fail(e)}}q.run=false})()}
+var saveT=null,lastSaved="";
+function save(){if(offline||!DB){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}return}
+  lastSaved=stable(S);clearTimeout(saveT);saveT=setTimeout(function(){saveT=null;put(STATE_PATH,JSON.parse(JSON.stringify(S)))},500)}
+var pubT=null;
+function pubMember(){if(offline||!DB||!S.onboarded)return;clearTimeout(pubT);pubT=setTimeout(function(){
+  var m=C.members[MY]||{},d={name:S.profile.name.trim(),area:S.profile.area.trim(),kids:ageLine(S.profile.kids),support:S.profile.support,pledge:!!S.safetyOk,requestedAt:m.requestedAt||null};
+  C.members[MY]=d;put("members/"+MY,d)},700)}
+function myItems(){return itemsOf(C,MY).slice()}
+function setItems(items){var d={items:items};C.posts[MY]=d;put("posts/"+MY,d)}
+function myClaims(){return ((C.claims[MY]||{}).items||[]).slice()}
+function setClaims(items){var d={items:items};C.claims[MY]=d;put("claims/"+MY,d)}
+function setMsgs(t){var d={t:t};C.msgs[MY]=d;put("msgs/"+MY,d)}
+function pubCheckin(){if(!DB)return;var e=S.emergency,d={on:!!e.checkinOn,every:+e.every||24,lastAt:e.lastCheckIn||0,buddies:e.buddies||[]};C.checkins[MY]=d;put("checkins/"+MY,d)}
+function soft(){var a=document.activeElement;
+  if(ui.sheet==="task"||(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&$("#app").contains(a))){ui.pending=true;return}render()}
+function sub(name){DB.collection(name).onSnapshot(function(s){var m={};s.docs.forEach(function(d){m[d.id]=d.data()});C[name]=m;
+  if(name==="approved"&&ADM&&S.onboarded&&!m[MY]&&!autoApproved){autoApproved=true;DB.doc("approved/"+MY).set({at:Date.now(),by:MY}).catch(fail)}
+  soft()},fail)}
+function boot(){ui.boot=true;render();
+  var bootT=setTimeout(function(){if(!stateReady){offline=true;S=loadLocal();ui.boot=false;render();toast("Could not reach the shared database. Working on this device only.")}},10000);
+  (async function(){
+    try{var cl=window.claude;if(cl&&cl.use){var d=await cl.use("db"),u=await cl.use("user");if(d&&u){MY=await u.id();ADM=await u.canEdit();if(MY)DB=d}}}catch(e){}
+    if(!DB){clearTimeout(bootT);offline=true;S=loadLocal();ui.boot=false;render();return}
+    STATE_PATH="data/users/"+MY+"/state";
+    DB.doc(STATE_PATH).onSnapshot(function(snap){
+      if(!stateReady){if(offline)return;stateReady=true;clearTimeout(bootT);
+        if(snap.exists)S=norm(snap.data());else{var l=loadLocal();if(l.onboarded)S=l}
+        ui.boot=false;lastSaved=stable(S);if(!snap.exists&&S.onboarded)save();
+        ["members","posts","claims","msgs","checkins","approved","blocked"].forEach(sub);if(ADM)sub("reports");
+        pubMember();render();return}
+      if(snap.metadata.hasPendingWrites||saveT||(wq[STATE_PATH]&&wq[STATE_PATH].run))return;
+      var d2=snap.data();if(!d2)return;var m=norm(d2);if(stable(m)!==lastSaved){S=m;lastSaved=stable(S);soft()}
+    },fail)
+  })()}
+
+var ui={tab:"today",screen:null,sheet:null,tview:"today",weekDay:null,editId:null,ostep:0,estep:0,chatId:null,boot:false,ask:null,thread:null,pending:false,rate:5,reportWhy:"",seed:true,key:""};
+
+function toast(m){var t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2600)}
+function kidsNamed(){return S.profile.kids.filter(function(k){return k.name.trim()})}
+function setPath(p,v){var o=S,a=p.split(".");for(var i=0;i<a.length-1;i++)o=o[a[i]];o[a[a.length-1]]=v}
+
+function seedTasks(which){var tk=todayK(),kids=kidsNamed(),kid=kids.length===1?kids[0].name:"";
+  which.forEach(function(n){TEMPLATES[n].items.forEach(function(it){S.tasks.push({id:uid(),title:it[1],time:it[0],day:tk,kid:kid,essential:!!it[2],done:false})})})}
+function loadSample(){S=blank();S.onboarded=true;S.profile={name:"Ada",kids:[{name:"Tobi",age:"7"},{name:"Zara",age:"3"}],support:"none",area:"Yaba, Lagos"};seedTasks(["school","homework","bedtime"]);
+  S.tasks.push({id:uid(),title:"Pay school fees instalment",time:"",day:todayK(),kid:"",essential:false,done:false});save()}
+
+/* icons */
+var IC={today:'<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/>',
+ support:'<circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3.5 19c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5M15.5 14.8c2.4-.3 4.4.9 5 3.7"/>',
+ emergency:'<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M12 9v6M9 12h6"/>',
+ me:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-4 3.6-6 7-6s6.2 2 7 6"/>'};
+var CHECK='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+function nav(){var tabs=[["today","Today"],["support","Support"],["emergency","Emergency"],["me","Me"]];
+  return '<nav class="tabs" aria-label="Main"><div class="in">'+tabs.map(function(t){var cur=!ui.screen&&ui.tab===t[0]||ui.screen&&ui.tab===t[0];
+    return '<button data-act="tab" data-v="'+t[0]+'"'+(cur?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+IC[t[0]]+'</svg>'+t[1]+(t[0]==="emergency"&&!S.emergency.done?'<i class="dot" title="Not set up"></i>':'')+'</button>'}).join("")+'</div></nav>'}
+
+/* ---------- onboarding ---------- */
+function onboard(){var s=ui.ostep,p=S.profile,h="";
+  var dots='<div class="steps" aria-label="Step '+(s+1)+' of 4">'+[0,1,2,3].map(function(i){return '<i class="'+(i<=s?"on":"")+'"></i>'}).join("")+'</div>';
+  if(s===0)h='<div class="stack" style="margin-top:8vh"><p class="eyebrow">Alongside</p><h1 style="font-size:2.4rem">Raising children on your own takes a team. Start with this one.</h1><p class="muted">Plan the day, get ready for emergencies, and find nearby parents to swap help with. Takes two minutes to set up.</p></div><div class="stack"><button class="btn primary block" data-act="onext">Get started</button><button class="btn ghost block" data-act="sample">Explore with sample data</button></div>';
+  if(s===1)h=dots+'<h2>About you</h2><label class="field"><span>Your first name</span><input id="o-name" type="text" data-bind="profile.name" value="'+esc(p.name)+'" autocomplete="given-name"></label><div class="stack"><p class="eyebrow">Your children</p>'+kidRows()+'<button class="link" data-act="addkid">+ Add another child</button></div><div class="row"><button class="btn" data-act="oback">Back</button><button class="btn primary grow" data-act="onext">Continue</button></div>';
+  if(s===2)h=dots+'<h2>Do you have people who can help?</h2><p class="muted">This changes what the app shows first. You can change it later in Me.</p><div class="stack">'+[["many","Yes, several","Family or friends I can call on."],["some","Occasionally","Someone helps now and then."],["none","No one","I do it alone. Show me how to build support."]].map(function(o){return '<button class="opt" data-act="support" data-v="'+o[0]+'" aria-pressed="'+(p.support===o[0])+'"><span class="grow"><b>'+o[1]+'</b><br><span class="muted">'+o[2]+'</span></span></button>'}).join("")+'</div><div class="row"><button class="btn" data-act="oback">Back</button><button class="btn primary grow" data-act="onext" '+(p.support?"":"disabled")+'>Continue</button></div>';
+  if(s===3)h=dots+'<h2>Where are you based?</h2><p class="muted">Used to find parents nearby. Only your area is shared, never your address.</p><label class="field"><span>Area or neighbourhood</span><input id="o-area" type="text" data-bind="profile.area" value="'+esc(p.area)+'" placeholder="e.g. Yaba, Lagos"></label><label class="check-row"><input type="checkbox" id="o-seed" '+(ui.seed?"checked":"")+' data-act="seedbox"><span>Start me with school-morning and bedtime routines</span></label><div class="row"><button class="btn" data-act="oback">Back</button><button class="btn primary grow" data-act="ofinish">Finish setup</button></div>';
+  return '<main class="scroll"><div class="wrap">'+h+'</div></main>'}
+function kidRows(){return S.profile.kids.map(function(k,i){return '<div class="row"><label class="field grow"><span class="muted" style="font-size:.8rem">Name</span><input type="text" data-kid="'+i+'" data-f="name" value="'+esc(k.name)+'" aria-label="Child '+(i+1)+' name"></label><label class="field" style="width:84px"><span class="muted" style="font-size:.8rem">Age</span><input type="text" inputmode="numeric" maxlength="2" data-kid="'+i+'" data-f="age" value="'+esc(k.age)+'" aria-label="Child '+(i+1)+' age"></label>'+(S.profile.kids.length>1?'<button class="btn small ghost" data-act="rmkid" data-i="'+i+'" aria-label="Remove child '+(i+1)+'" style="margin-top:22px">✕</button>':'')+'</div>'}).join("")}
+
+/* ---------- Today ---------- */
+function taskRow(t){return '<div class="task'+(t.done?" done":"")+'"><button class="check" data-act="toggle" data-id="'+t.id+'" aria-pressed="'+t.done+'" aria-label="'+(t.done?"Mark not done: ":"Mark done: ")+esc(t.title)+'">'+(t.done?CHECK:"")+'</button><button class="tmain" data-act="edit" data-id="'+t.id+'"><span class="ttitle">'+esc(t.title)+'</span><span class="tmeta">'+(t.time||"Any time")+(t.kid?" · "+esc(t.kid):"")+'</span></button>'+(t.essential?'<span class="tag">Essential</span>':"")+'</div>'}
+function sortT(a,b){return (a.time||"99:99").localeCompare(b.time||"99:99")}
+function viewToday(){var tk=todayK(),now=new Date(),nm=now.getHours()*60+now.getMinutes(),h=now.getHours();
+  var list=S.tasks.filter(function(t){return t.day===tk}).sort(sortT),done=list.filter(function(t){return t.done}).length,pend=list.filter(function(t){return !t.done});
+  var next=pend.find(function(t){return t.time&&toM(t.time)>=nm})||pend[0],lean=S.lean[tk],g=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+  var out='<div><p class="eyebrow">'+now.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"})+'</p><h1>'+g+(S.profile.name?", "+esc(S.profile.name):"")+'</h1></div>';
+  out+='<div class="seg" role="group" aria-label="View"><button data-act="tview" data-v="today" aria-pressed="'+(ui.tview==="today")+'">Today</button><button data-act="tview" data-v="week" aria-pressed="'+(ui.tview==="week")+'">Week</button></div>';
+  if(ui.tview==="week")return out+viewWeek();
+  if(lean)out+='<div class="banner"><span><b>Lean day is on.</b> '+(lean.length?lean.length+" task"+(lean.length>1?"s":"")+" moved to tomorrow.":"Nothing needed moving.")+'</span><button class="btn small" data-act="undolean">Undo</button></div>';
+  if(next)out+='<section class="next'+(lean?" lean":"")+'" aria-label="Next up"><span class="eyebrow" style="color:inherit;opacity:.8">Next up</span><span class="big">'+(next.time||"Any time")+'</span><span class="t">'+esc(next.title)+(next.kid?" · "+esc(next.kid):"")+'</span><button class="btn" data-act="toggle" data-id="'+next.id+'">Mark done</button></section>';
+  else out+='<section class="next"><span class="eyebrow" style="color:inherit;opacity:.8">Today</span><span class="t" style="font-size:1.5rem;font-family:var(--display);font-weight:800">'+(list.length?"All done. Rest well.":"Nothing planned yet.")+'</span>'+(list.length?"":'<button class="btn" data-act="sheet" data-v="routines">Add a routine</button>')+'</section>';
+  if(list.length)out+='<div class="stack"><div class="row"><span class="grow muted">'+done+' of '+list.length+' done</span></div><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+list.length+'" aria-valuenow="'+done+'"><i style="width:'+Math.round(done/list.length*100)+'%"></i></div></div><div class="stack">'+list.map(taskRow).join("")+'</div>';
+  out+='<div class="two"><button class="btn primary" data-act="add">+ Add task</button><button class="btn" data-act="sheet" data-v="routines">Routines</button></div>';
+  if(!lean)out+='<button class="btn block" style="border-color:var(--warn);color:var(--warn)" data-act="sheet" data-v="overload">I\'m overloaded today</button>';
+  return out}
+function viewWeek(){var out="",tk=todayK();for(var i=0;i<7;i++){var d=addDays(tk,i),l=S.tasks.filter(function(t){return t.day===d}).sort(sortT);
+  out+='<section class="stack"><div class="row"><h3 class="grow">'+(i===0?"Today":i===1?"Tomorrow":dayLabel(d))+'</h3><span class="muted">'+l.length+' task'+(l.length===1?"":"s")+'</span><button class="btn small ghost" data-act="addday" data-d="'+d+'" aria-label="Add task on '+dayLabel(d)+'">+ Add</button></div>'+(l.length?l.map(taskRow).join(""):'<p class="muted">Nothing planned.</p>')+'</section>'}
+  return out}
+
+function sheetTask(){var t=S.tasks.find(function(x){return x.id===ui.editId}),isNew=!t;
+  t=t||{title:"",time:"",day:ui.weekDay||todayK(),kid:"",essential:false};var kids=kidsNamed();
+  return '<h2>'+(isNew?"Add task":"Edit task")+'</h2><label class="field"><span>What needs doing</span><input id="t-title" type="text" maxlength="80" value="'+esc(t.title)+'"></label><div class="two"><label class="field"><span>Time</span><input id="t-time" type="time" value="'+esc(t.time)+'"></label><label class="field"><span>Day</span><input id="t-day" type="date" value="'+esc(t.day)+'"></label></div><label class="field"><span>For</span><select id="t-kid"><option value="">Whole family</option>'+kids.map(function(k){return '<option'+(k.name===t.kid?" selected":"")+'>'+esc(k.name)+'</option>'}).join("")+'</select></label><label class="check-row"><input id="t-ess" type="checkbox"'+(t.essential?" checked":"")+'><span>Essential (stays on a lean day)</span></label><div class="row"><button class="btn ghost" data-act="close">Cancel</button>'+(isNew?"":'<button class="btn ghost" data-act="deltask" style="color:var(--alert)">Delete</button>')+'<button class="btn primary grow" data-act="savetask">Save</button></div>'}
+function sheetOverload(){var tk=todayK(),l=S.tasks.filter(function(t){return t.day===tk&&!t.done}),keep=l.filter(function(t){return t.essential}),mv=l.filter(function(t){return !t.essential});
+  return '<h2>Make today lean</h2><p class="muted">Essentials stay. Everything else moves to tomorrow. You can undo it.</p><div class="card stack"><b>Stays today ('+keep.length+')</b>'+(keep.length?keep.map(function(t){return '<span>'+esc(t.time||"Any time")+' · '+esc(t.title)+'</span>'}).join(""):'<span class="muted">No essential tasks left.</span>')+'</div><div class="card stack"><b>Moves to tomorrow ('+mv.length+')</b>'+(mv.length?mv.map(function(t){return '<span>'+esc(t.title)+'</span>'}).join(""):'<span class="muted">Your list is already essentials only.</span>')+'</div><div class="row"><button class="btn ghost" data-act="close">Cancel</button><button class="btn primary grow" data-act="doloverload">Go lean</button></div>'}
+function sheetRoutines(){return '<h2>Routines</h2><p class="muted">Adds the tasks to today. Edit or delete any of them afterwards.</p>'+Object.keys(TEMPLATES).map(function(k){var t=TEMPLATES[k];return '<div class="card row"><div class="grow"><b>'+t.label+'</b><br><span class="muted">'+t.note+'</span></div><button class="btn small primary" data-act="addtpl" data-v="'+k+'">Add</button></div>'}).join("")+'<button class="btn ghost" data-act="close">Close</button>'}
+
+/* ---------- Emergency ---------- */
+function cardText(){var e=S.emergency,k=kidsNamed().map(function(x){return x.name+(x.age?" ("+x.age+")":"")}).join(", ");
+  var L=["EMERGENCY INFORMATION","Parent: "+(S.profile.name||"")+(e.myPhone?" "+e.myPhone:""),"Children: "+k];
+  if(e.allergies)L.push("Allergies: "+e.allergies);if(e.meds)L.push("Medication: "+e.meds);if(e.doctor)L.push("Doctor: "+e.doctor);
+  if(e.school)L.push("School: "+e.school+(e.schoolPhone?" "+e.schoolPhone:""));if(e.pickup)L.push("Pickup notes: "+e.pickup);
+  if(e.contacts.length)L.push("Contacts: "+e.contacts.map(function(c){return c.name+(c.role?" ("+c.role+")":"")+" "+c.phone}).join("; "));
+  if(e.plan)L.push("If I'm sick or stuck: "+e.plan);return L.join("\n")}
+function cardHtml(big){var e=S.emergency,k=kidsNamed().map(function(x){return esc(x.name)+(x.age?" ("+esc(x.age)+")":"")}).join(", ");
+  function r(l,v){return v?'<div><dt>'+l+'</dt><dd>'+v+'</dd></div>':""}
+  return '<article class="ecard'+(big?" big":"")+'"><header>Emergency information</header><dl>'+r("Parent",esc(S.profile.name)+(e.myPhone?"\n"+esc(e.myPhone):""))+r("Children",k)+r("Allergies",esc(e.allergies))+r("Medication",esc(e.meds))+r("Doctor",esc(e.doctor))+r("School",esc(e.school)+(e.schoolPhone?"\n"+esc(e.schoolPhone):""))+r("Pickup notes",esc(e.pickup))+r("Contacts",e.contacts.map(function(c){return esc(c.name)+(c.role?" ("+esc(c.role)+")":"")+"\n"+esc(c.phone)}).join("\n\n"))+r("If I'm sick or stuck",esc(e.plan))+'</dl></article>'}
+function viewEmergency(){var e=S.emergency;
+  if(!e.done)return '<div><p class="eyebrow">Emergency plan</p><h1>Be ready if you cannot be</h1></div><div class="card stack"><p>Answer five short questions once. Alongside builds a card with your children\'s health details and who to call, ready to share with a teacher or neighbour.</p><button class="btn alert block" data-act="esetup">Set up in about 4 minutes</button></div><div class="banner info"><span>Many parents alone worry most about this. It is the single most useful thing to finish first.</span></div>';
+  var due=e.checkinOn&&e.lastCheckIn&&Date.now()-e.lastCheckIn>(+e.every||24)*3600000,tf=function(ts){return new Date(ts).toLocaleString(undefined,{weekday:"short",hour:"2-digit",minute:"2-digit"})},bn=(e.buddies||[]).map(function(i){return esc(who(i))});
+  var ck=e.checkinOn?'<p class="muted">Every '+esc(e.every)+' hours. Last check-in: '+(e.lastCheckIn?tf(e.lastCheckIn):"none yet")+'.</p>'+(due?'<div class="banner" style="background:var(--alert-soft)"><span><b>You missed a check-in.</b> Check in now.</span></div>':"")+'<button class="btn primary" data-act="checkin">I\'m OK. Check in now</button><p class="muted">Buddies: '+(bn.length?bn.join(", "):"none chosen")+'</p>':'<p class="muted">Off.</p>';
+  return '<div><p class="eyebrow">Emergency plan</p><h1>Your emergency card</h1></div>'+cardHtml(false)+'<div class="two"><button class="btn alert" data-act="sheet" data-v="show">Show to someone</button><button class="btn" data-act="copycard">Copy to share</button></div><button class="btn block" data-act="esetup">Edit plan</button><div class="card stack"><b>Check-ins</b>'+ck+'<p class="muted" style="font-size:.85rem">Buddies are other Alongside members. They see a prompt to check on you when they open the app. No texts or push notifications are sent yet.</p><button class="link" data-act="esetup" data-step="4">Change check-in settings</button></div>'}
+var ESTEPS=["Health details","School","Fallback contacts","If I'm sick or stuck","Check-ins"];
+function viewESetup(){var e=S.emergency,s=ui.estep,h="";
+  if(s===0)h='<label class="field"><span>Your phone number</span><input type="tel" data-bind="emergency.myPhone" value="'+esc(e.myPhone)+'" autocomplete="tel"></label><label class="field"><span>Allergies</span><textarea data-bind="emergency.allergies" style="min-height:80px" placeholder="e.g. Tobi: peanuts">'+esc(e.allergies)+'</textarea></label><label class="field"><span>Medication and doses</span><textarea data-bind="emergency.meds" style="min-height:80px">'+esc(e.meds)+'</textarea></label><label class="field"><span>Doctor or clinic and phone</span><input type="text" data-bind="emergency.doctor" value="'+esc(e.doctor)+'"></label>';
+  if(s===1)h='<label class="field"><span>School name</span><input type="text" data-bind="emergency.school" value="'+esc(e.school)+'"></label><label class="field"><span>School office phone</span><input type="tel" data-bind="emergency.schoolPhone" value="'+esc(e.schoolPhone)+'"></label><label class="field"><span>Pickup notes</span><textarea data-bind="emergency.pickup" style="min-height:80px" placeholder="Who may collect the children, gate, class">'+esc(e.pickup)+'</textarea></label>';
+  if(s===2)h='<p class="muted">'+(S.profile.support==="none"?"No relatives nearby is common. Teachers, neighbours, a pastor or imam, and the school office all count. The Support tab can help you find more.":"People who can step in if you cannot. Two or three is enough.")+'</p>'+(e.contacts.length?'<div class="stack">'+e.contacts.map(function(c,i){return '<div class="card row"><div class="grow"><b>'+esc(c.name)+'</b><br><span class="muted">'+esc(c.role||"Contact")+' · '+esc(c.phone)+'</span></div><button class="btn small ghost" data-act="rmcontact" data-i="'+i+'" aria-label="Remove '+esc(c.name)+'">✕</button></div>'}).join("")+'</div>':"")+'<div class="card stack"><label class="field"><span>Name</span><input id="c-name" type="text"></label><div class="two"><label class="field"><span>Phone</span><input id="c-phone" type="tel"></label><label class="field"><span>Who are they?</span><input id="c-role" type="text" placeholder="Neighbour"></label></div><button class="btn" data-act="addcontact">Add contact</button></div>';
+  if(s===3)h='<p class="muted">Write what should happen. Keep it short enough for a stranger to follow.</p><label class="field"><span>My plan</span><textarea id="e-plan" data-bind="emergency.plan">'+esc(e.plan)+'</textarea></label><div class="chips">'+["Call my first contact to collect the children","Ask the school to keep the children until someone arrives","Medication is in the kitchen cupboard","Spare key is with a neighbour"].map(function(t){return '<button class="chip" data-act="addline" data-t="'+esc(t)+'">+ '+esc(t)+'</button>'}).join("")+'</div>';
+  if(s===4){var bc=Object.keys(C.members).filter(function(i){return i!==MY&&approvedOf(C,i)});
+    h='<label class="check-row"><input type="checkbox" data-bind="emergency.checkinOn" '+(e.checkinOn?"checked":"")+'><span>Ask me to check in</span></label><label class="field"><span>How often</span><select data-bind="emergency.every"><option value="12"'+(e.every==="12"?" selected":"")+'>Every 12 hours</option><option value="24"'+(e.every==="24"?" selected":"")+'>Every 24 hours</option><option value="48"'+(e.every==="48"?" selected":"")+'>Every 48 hours</option></select></label><div class="stack"><p class="eyebrow">Check-in buddies</p>'+(bc.length?'<div class="chips">'+bc.map(function(i){return '<button class="chip" data-act="buddy" data-id="'+esc(i)+'" aria-pressed="'+(e.buddies.indexOf(i)>=0)+'">'+esc(who(i))+'</button>'}).join("")+'</div>':'<p class="muted">No other members yet. Buddies are Alongside members who see a prompt to check on you if you miss a check-in.</p>')+'</div><div class="banner info"><span>No texts or push notifications are sent yet. Buddies see the prompt when they open the app.</span></div>'}
+  return '<button class="back" data-act="eclose">‹ Back</button><div class="steps" aria-label="Step '+(s+1)+' of 5">'+[0,1,2,3,4].map(function(i){return '<i class="'+(i<=s?"on":"")+'"></i>'}).join("")+'</div><div><p class="eyebrow">Step '+(s+1)+' of 5</p><h2>'+ESTEPS[s]+'</h2></div>'+h+'<div class="row"><button class="btn" data-act="eprev"'+(s===0?" disabled":"")+'>Back</button><button class="btn primary grow" data-act="enext">'+(s===4?"Finish":"Continue")+'</button></div>'}
+function sheetShow(){return '<div class="full" role="dialog" aria-modal="true" aria-label="Emergency card"><button class="btn block" data-act="close">Close</button>'+cardHtml(true)+'</div>'}
+
+/* ---------- Support ---------- */
+function mstat(){if(C.blocked[MY])return "blocked";if(C.approved[MY])return "approved";var m=C.members[MY];return m&&m.requestedAt?"pending":"none"}
+function who(id){return (C.members[id]&&C.members[id].name)||"A parent"}
+function stars(r){return r.n?r.avg.toFixed(1)+" ("+r.n+")":"New"}
+function stTag(){var s=mstat();return s==="approved"?'<span class="tag ok">Approved</span>':s==="pending"?'<span class="tag warn">Waiting for approval</span>':s==="blocked"?'<span class="tag alert">Paused</span>':'<span class="tag sample">Not joined</span>'}
+function findItem(o,id){return allItems(C).find(function(i){return i.owner===o&&i.id===id})}
+function viewSupport(){var p=S.profile,out='<div><p class="eyebrow">Support</p><h1>'+(p.support==="none"?"Build your village":"Your village")+'</h1></div>';
+  if(!DB)return out+'<div class="card stack"><b>The community needs the shared database</b><p class="muted">Open this app from your Claude account while signed in to use it. Your planner and emergency card still work on this device.</p></div>';
+  var st=mstat(),ok=st==="approved",bal=balanceOf(C,MY),rt=ratingOf(C,MY),all=allItems(C),blocked=S.blockedIds;
+  if(p.support==="none")out+='<div class="banner info"><span>You said no one is nearby to help. Swap time with other parents here and earn credits you can spend when you need cover.</span></div>';
+  out+='<div class="card stack"><div class="row"><div class="credits grow"><b>'+bal+'</b><span class="muted">time credits</span></div>'+stTag()+'</div><p class="muted">1 credit is about 1 hour. Your rating: '+stars(rt)+'. Everyone starts with 3.</p>'+(ok?"":'<button class="btn primary" data-act="screen" data-v="verify">'+(st==="none"?"Join the community":"Check status")+'</button>')+'</div>';
+  overdue(C,MY,Date.now()).forEach(function(id){out+='<div class="banner" style="background:var(--alert-soft)"><span><b>'+esc(who(id))+'</b> listed you as a check-in buddy and has missed a check-in. Please try to reach them.</span></div>'});
+  out+='<div class="two"><button class="btn primary" data-act="screen" data-v="request">Request help</button><button class="btn" data-act="screen" data-v="offer">Offer help</button></div>';
+  var act=all.filter(function(i){return i.kind==="request"&&i.status==="matched"&&(i.owner===MY||i.helperId===MY)&&blocked.indexOf(i.owner===MY?i.helperId:i.owner)<0});
+  if(act.length)out+='<section class="stack"><h3>Active exchanges</h3>'+act.map(function(i){var o=i.owner===MY?i.helperId:i.owner;
+    return '<button class="card row" data-act="chat" data-o="'+esc(i.owner)+'" data-id="'+esc(i.id)+'" style="text-align:left;width:100%"><span class="avatar">'+esc(who(o)[0])+'</span><span class="grow"><b>'+esc(who(o))+'</b><br><span class="muted">'+esc(i.type)+' · '+esc(i.when)+'</span></span><span class="tag">'+(i.owner===MY?"-":"+")+i.credits+' cr</span></button>'}).join("")+'</section>';
+  var open=all.filter(function(i){return i.owner===MY&&i.status==="open"});
+  if(open.length)out+='<section class="stack"><h3>Your posts</h3>'+open.map(function(it){var cl=it.kind==="request"?claimersOf(C,MY,it.id):[];
+    return '<div class="card stack"><div class="row"><div class="grow"><b>'+(it.kind==="request"?"Request: "+esc(it.type):"Offer: "+esc(it.what))+'</b>'+(it.toId?' <span class="tag">For '+esc(who(it.toId))+'</span>':'')+'<br><span class="muted">'+esc(it.when)+(it.kind==="request"?" · "+it.credits+" cr":"")+'</span></div><button class="btn small ghost" data-act="cancelpost" data-id="'+esc(it.id)+'">Remove</button></div>'+
+    (it.kind==="request"?(cl.length?cl.map(function(h){return '<div class="row"><span class="grow"><b>'+esc(who(h))+'</b> can help · '+stars(ratingOf(C,h))+'</span><button class="btn small primary" data-act="accept" data-id="'+esc(it.id)+'" data-h="'+esc(h)+'">Accept</button></div>'}).join(""):'<span class="tag warn" style="align-self:flex-start">Waiting for a neighbour</span>'):"")+'</div>'}).join("")+'</section>';
+  var nb=nearby(C,MY,blocked);
+  out+='<section class="stack"><h3>Near '+esc(p.area||"you")+'</h3>';
+  nb.requests.forEach(function(it){var m=C.members[it.owner]||{},mc=claimOf(C,MY,it);
+    out+='<div class="card stack"><div class="row"><span class="avatar">'+esc(who(it.owner)[0])+'</span><div class="grow"><b>'+esc(who(it.owner))+'</b> <span class="tag">'+stars(ratingOf(C,it.owner))+'</span><br><span class="muted">'+esc(m.area||"")+(m.kids?" · "+esc(m.kids):"")+'</span></div></div><div class="row"><div class="grow"><b>'+esc(it.type)+'</b>'+(it.toId?' <span class="tag">Asked of you</span>':'')+'<br><span class="muted">'+esc(it.when)+'</span>'+(it.note?'<br><span class="muted">'+esc(it.note)+'</span>':'')+'</div><span class="tag">+'+it.credits+' cr</span></div>'+
+    (mc?'<div class="row"><span class="grow muted">You offered. Waiting for '+esc(who(it.owner))+'.</span><button class="btn small ghost" data-act="unhelp" data-o="'+esc(it.owner)+'" data-id="'+esc(it.id)+'">Withdraw</button></div>':'<button class="btn small primary" data-act="help" data-o="'+esc(it.owner)+'" data-id="'+esc(it.id)+'">I can help</button>')+'</div>'});
+  nb.offers.forEach(function(it){var m=C.members[it.owner]||{};
+    out+='<div class="card stack"><div class="row"><span class="avatar">'+esc(who(it.owner)[0])+'</span><div class="grow"><b>'+esc(who(it.owner))+'</b> <span class="tag ok">Offering</span> <span class="tag">'+stars(ratingOf(C,it.owner))+'</span><br><span class="muted">'+esc(m.area||"")+'</span></div></div><div><b>'+esc(it.what)+'</b><br><span class="muted">'+esc(it.when)+'</span></div><button class="btn small" data-act="ask" data-o="'+esc(it.owner)+'">Ask '+esc(who(it.owner))+'</button></div>'});
+  if(!nb.requests.length&&!nb.offers.length)out+='<div class="card stack"><b>Nothing nearby yet</b><p class="muted">The community grows as parents join. Invite parents you know from this page\'s Share menu as Contributors, then approve them in Me.</p></div>';
+  out+='</section>';
+  var hist=all.filter(function(i){return i.kind==="request"&&i.status==="done"&&(i.owner===MY||i.helperId===MY)});
+  if(hist.length)out+='<section class="stack"><h3>History</h3>'+hist.map(function(i){var o=i.owner===MY?i.helperId:i.owner;return '<div class="card row"><div class="grow"><b>'+esc(who(o))+'</b><br><span class="muted">'+esc(i.type)+(i.owner===MY&&i.rating?" · you rated "+i.rating+"/5":"")+'</span></div><span class="tag ok">'+(i.owner===MY?"-":"+")+i.credits+' cr</span></div>'}).join("")+'</section>';
+  return out}
+function viewVerify(){var st=mstat(),line=ageLine(S.profile.kids),pOk=S.profile.name.trim()&&S.profile.area.trim()&&line;
+  return '<button class="back" data-act="back">‹ Back</button><div><h2>Join the community</h2><p class="muted" style="margin-top:6px">A community admin approves every member before they can request or offer help.</p></div>'+
+  '<div class="card stack"><b>What other members see</b><p class="muted">Your first name ('+esc(S.profile.name||"not set")+'), area ('+esc(S.profile.area||"not set")+') and children\'s ages ('+esc(line||"not set")+'). Never your children\'s names, phone number or address.</p></div>'+
+  '<div class="card row"><div class="grow"><b>Profile complete</b><br><span class="muted">Name, area and at least one child\'s age</span></div>'+(pOk?'<span class="tag ok">Done</span>':'<button class="btn small primary" data-act="tab" data-v="me">Finish</button>')+'</div>'+
+  '<label class="card check-row"><input type="checkbox" data-act="pledge"'+(S.safetyOk?" checked":"")+'><span>I will meet in public places or at school first, keep my address private, and never leave a child with someone who is not approved.</span></label>'+
+  (st==="none"?'<button class="btn primary block" data-act="submitjoin"'+(pOk&&S.safetyOk?"":" disabled")+'>Submit for approval</button>':
+   st==="pending"?'<div class="banner"><span><b>Submitted.</b> '+(ADM?"You are an admin. Open Me to approve members.":"The person who shared this app with you will approve you.")+'</span></div>':
+   st==="approved"?'<div class="banner" style="background:var(--ok-soft)"><span><b>You are approved.</b> You can request and offer help.</span></div>':
+   '<div class="banner" style="background:var(--alert-soft)"><span>Your membership is paused. Contact the community admin.</span></div>')}
+function viewRequest(){var ask=ui.ask,bal=balanceOf(C,MY);
+  return '<button class="back" data-act="back">‹ Back</button><div><h2>'+(ask?"Ask "+esc(ask.name):"Request help")+'</h2><p class="muted" style="margin-top:6px">You have '+bal+' credit'+(bal===1?"":"s")+'.'+(ask?" Only "+esc(ask.name)+" is asked.":"")+'</p></div><label class="field"><span>What do you need</span><select id="r-type"><option>School pickup</option><option>Babysitting</option><option>Emergency cover</option><option>Errand run</option><option>Other</option></select></label><label class="field"><span>When</span><input id="r-when" type="datetime-local"></label><label class="field"><span>Credits offered</span><select id="r-cr"><option>1</option><option>2</option><option>3</option><option>4</option></select></label><label class="field"><span>Note</span><textarea id="r-note" style="min-height:80px" maxlength="200"></textarea></label><div class="banner info"><span>Approved members can see your first name, area and this request. Keep addresses and phone numbers out.</span></div><button class="btn primary block" data-act="postreq">Post request</button>'}
+function viewOffer(){return '<button class="back" data-act="back">‹ Back</button><div><h2>Offer help</h2><p class="muted" style="margin-top:6px">Tell neighbours when you are free.</p></div><div class="stack"><p class="eyebrow">What you can do</p><div class="chips" id="o-what">'+["School pickup","Babysitting","Emergency cover","Errand run"].map(function(w){return '<label class="chip"><input type="checkbox" value="'+w+'"> '+w+'</label>'}).join("")+'</div></div><label class="field"><span>When are you free</span><input id="o-when" type="text" placeholder="e.g. Weekdays after 15:00" maxlength="80"></label><button class="btn primary block" data-act="postoffer">Post offer</button>'}
+function threadItem(){var T=ui.thread,it=T&&findItem(T.o,T.id);if(!it||!it.helperId||(it.owner!==MY&&it.helperId!==MY))return null;
+  var o=it.owner===MY?it.helperId:it.owner;return S.blockedIds.indexOf(o)>=0?null:it}
+function viewChat(){var it=threadItem();if(!it){ui.screen=null;return viewSupport()}
+  var o=it.owner===MY?it.helperId:it.owner,msgs=threadMsgs(C,it),isReq=it.owner===MY,live=it.status==="matched";
+  return '<button class="back" data-act="back">‹ Back</button><div class="row"><span class="avatar">'+esc(who(o)[0])+'</span><div class="grow"><h2>'+esc(who(o))+'</h2><span class="muted">'+esc(it.type)+' · '+esc(it.when)+'</span></div><button class="btn small ghost" data-act="sheet" data-v="report">Report</button></div>'+
+  '<div class="banner"><span>Messages here can be seen by other approved members. Do not share phone numbers or addresses.</span></div>'+
+  '<div class="msgs" aria-live="polite">'+(msgs.length?msgs.map(function(m){return '<div class="msg'+(m.from===MY?" me":"")+'">'+esc(m.text)+'</div>'}).join(""):'<div class="msg sys">No messages yet. Agree the time and a public meeting place.</div>')+'</div>'+
+  (live?'<div class="chips">'+["Hello, thank you for the request","Can you confirm the time?","Running 5 minutes late"].map(function(t){return '<button class="chip" data-act="quick" data-t="'+t+'">'+t+'</button>'}).join("")+'</div><div class="row"><input id="m-in" type="text" class="grow" placeholder="Write a message" aria-label="Message" maxlength="300"><button class="btn primary" data-act="send">Send</button></div>'+
+    (isReq?'<button class="btn block" data-act="sheet" data-v="rate">Mark as complete</button>':'<p class="muted" style="text-align:center">'+esc(who(o))+' marks the exchange complete when it is done.</p>'):
+    '<div class="banner info"><span>This exchange is '+esc(it.status)+'.</span></div>')}
+function sheetRate(){var it=threadItem();if(!it)return '<h2>Not available</h2><button class="btn" data-act="close">Close</button>';
+  return '<h2>How did it go?</h2><p class="muted">Rate '+esc(who(it.helperId))+'. '+it.credits+' credit'+(it.credits>1?"s":"")+' move to their balance.</p><div class="stars" role="group" aria-label="Rating">'+[1,2,3,4,5].map(function(n){return '<button data-act="star" data-v="'+n+'" aria-pressed="'+(ui.rate===n)+'" aria-label="'+n+' of 5">'+n+'</button>'}).join("")+'</div><div class="row"><button class="btn ghost" data-act="close">Cancel</button><button class="btn primary grow" data-act="complete">Complete</button></div>'}
+function sheetReport(){var it=threadItem(),n=it?who(it.owner===MY?it.helperId:it.owner):"this person";
+  return '<h2>Report and block</h2><p class="muted">This hides '+esc(n)+' from you and sends a report to the community admin.</p><div class="stack">'+["Made me uncomfortable","Asked for my address too early","Did not show up","Something else"].map(function(w){return '<button class="opt" data-act="why" data-v="'+w+'" aria-pressed="'+(ui.reportWhy===w)+'">'+w+'</button>'}).join("")+'</div><div class="row"><button class="btn ghost" data-act="close">Cancel</button><button class="btn alert grow" data-act="doreport"'+(ui.reportWhy?"":" disabled")+'>Report and block</button></div>'}
+
+/* ---------- Me ---------- */
+function adminPanel(){var ids=Object.keys(C.members),rep=[];
+  Object.keys(C.reports).forEach(function(r){((C.reports[r]||{}).items||[]).forEach(function(x){rep.push({by:r,about:x.about,why:x.why})})});
+  return '<div class="card stack"><b>Community admin</b><p class="muted">Approve parents you know before they can request or offer help. To add people, use this page\'s Share menu and invite each one as a Contributor.</p>'+
+  (ids.length?ids.map(function(id){var m=C.members[id],ap=!!C.approved[id],bl=!!C.blocked[id];
+    return '<div class="row" style="flex-wrap:wrap"><div class="grow"><b>'+esc(m.name||"Unnamed")+(id===MY?" (you)":"")+'</b><br><span class="muted">'+esc(m.area||"No area")+(m.kids?" · "+esc(m.kids):"")+'</span></div>'+
+    (bl?'<span class="tag alert">Paused</span>':ap?'<span class="tag ok">Approved</span>':m.requestedAt?'<span class="tag warn">Pending</span>':'<span class="tag sample">Not submitted</span>')+
+    '<button class="btn small" data-act="'+(bl?"unblock":ap?"revoke":"approve")+'" data-id="'+esc(id)+'">'+(bl?"Unpause":ap?"Revoke":"Approve")+'</button>'+(id!==MY&&!bl?'<button class="btn small ghost" data-act="block" data-id="'+esc(id)+'">Pause</button>':'')+'</div>'}).join(""):'<p class="muted">No members yet.</p>')+
+  (rep.length?'<b>Reports ('+rep.length+')</b>'+rep.map(function(r){return '<span class="muted">'+esc(who(r.by))+' reported '+esc(who(r.about))+': '+esc(r.why)+'</span>'}).join(""):'')+'</div>'}
+function viewMe(){var p=S.profile;
+  return '<div><p class="eyebrow">Me</p><h1>Your profile</h1></div>'+(DB?"":'<div class="banner"><span>Saved on this device only. Open the app from your Claude account to sync and use the community.</span></div>')+'<div class="card stack"><label class="field"><span>First name</span><input type="text" data-bind="profile.name" value="'+esc(p.name)+'"></label><label class="field"><span>Area</span><input type="text" data-bind="profile.area" value="'+esc(p.area)+'"></label><label class="field"><span>Do you have people who can help?</span><select data-bind="profile.support"><option value="many"'+(p.support==="many"?" selected":"")+'>Yes, several</option><option value="some"'+(p.support==="some"?" selected":"")+'>Occasionally</option><option value="none"'+(p.support==="none"?" selected":"")+'>No one</option></select></label></div><div class="card stack"><b>Children</b>'+kidRows()+'<button class="link" data-act="addkid">+ Add child</button></div>'+(DB&&ADM?adminPanel():"")+'<details class="card"><summary>Safety centre</summary><p>Meet first in a public place or at school. Keep your address private until you have exchanged help a few times. Never leave a child alone with someone who is not approved. Use Report in any chat if something feels wrong.</p></details><details class="card"><summary>How credits work</summary><p>One credit is about an hour of help. When a request is marked complete, the credits move from the person who asked to the person who helped. Everyone starts with 3. In this version the ledger works on trust, so only invite people you know.</p></details><details class="card"><summary>Your data</summary><p>'+(DB?"Your profile, tasks and emergency card are stored privately in your account space and sync across your devices. Other members see only your first name, area, children's ages, and what you post.":"This browser only. Clearing site data removes it.")+'</p></details><button class="btn block" style="color:var(--alert)" data-act="sheet" data-v="reset">Reset all data</button>'}
+function sheetReset(){return '<h2>Reset everything?</h2><p class="muted">This deletes your profile, tasks, emergency card, posts and messages. Completed exchanges stay in other members\' history. It cannot be undone.</p><div class="row"><button class="btn ghost" data-act="close">Cancel</button><button class="btn alert grow" data-act="doreset">Delete everything</button></div>'}
+
+/* ---------- render ---------- */
+var SHEETS={task:sheetTask,overload:sheetOverload,routines:sheetRoutines,rate:sheetRate,report:sheetReport,reset:sheetReset};
+var SCREENS={"e-setup":viewESetup,verify:viewVerify,request:viewRequest,offer:viewOffer,chat:viewChat};
+var TABS={today:viewToday,support:viewSupport,emergency:viewEmergency,me:viewMe};
+function render(){var root=$("#app");if(ui.boot){root.innerHTML='<main class="scroll"><div class="wrap" style="padding-top:20vh"><p class="eyebrow">Alongside</p><h2>Opening your space</h2><p class="muted">Loading your plan and community.</p></div></main>';return}if(!S.onboarded){root.innerHTML=onboard();return}
+  var sc=$("#scroll"),top=sc?sc.scrollTop:0,key=(ui.screen||ui.tab)+ui.tview+ui.estep;
+  var body=ui.screen?SCREENS[ui.screen]():TABS[ui.tab]();
+  var hideNav=ui.screen==="e-setup"||ui.screen==="chat";
+  var sh="";if(ui.sheet==="show")sh=sheetShow();else if(ui.sheet)sh='<div class="sheet" data-act="backdrop"><div class="panel" role="dialog" aria-modal="true">'+SHEETS[ui.sheet]()+'</div></div>';
+  root.innerHTML='<main class="scroll" id="scroll"><div class="wrap">'+body+'</div></main>'+(hideNav?"":nav())+sh;
+  var n=$("#scroll");if(n&&key===ui.key)n.scrollTop=top;ui.key=key}
+function go(tab){ui.tab=tab;ui.screen=null;ui.sheet=null;render()}
+
+/* ---------- events ---------- */
+function field(id){var n=document.getElementById(id);return n?n.value.trim():""}
+function copy(text){function fb(){var ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Card copied")}catch(e){toast("Select and copy the card text")}ta.remove()}
+  try{navigator.clipboard.writeText(text).then(function(){toast("Card copied")},fb)}catch(e){fb()}}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-act]");if(!b)return;var a=b.dataset.act,v=b.dataset.v,id=b.dataset.id;
+  if(a==="backdrop"&&e.target!==b)return;
+  function needDb(){if(!DB){toast("Open the app from your Claude account to use the community.");return true}return false}
+  function needMember(){if(needDb())return true;if(mstat()!=="approved"){ui.screen="verify";ui.sheet=null;toast("Join the community first.");return true}return false}
+  switch(a){
+  case "backdrop":case "close":ui.sheet=null;ui.editId=null;break;
+  case "sample":loadSample();pubMember();break;
+  case "onext":ui.ostep++;break;case "oback":ui.ostep--;break;
+  case "seedbox":ui.seed=b.checked;return;
+  case "support":S.profile.support=v;save();pubMember();break;
+  case "addkid":S.profile.kids.push({name:"",age:""});save();pubMember();break;
+  case "rmkid":S.profile.kids.splice(+b.dataset.i,1);save();pubMember();break;
+  case "ofinish":S.onboarded=true;if(ui.seed&&!S.tasks.length)seedTasks(["school","bedtime"]);ui.tab="today";save();pubMember();break;
+  case "tab":go(v);return;
+  case "tview":ui.tview=v;break;
+  case "add":ui.editId=null;ui.weekDay=null;ui.sheet="task";break;
+  case "addday":ui.editId=null;ui.weekDay=b.dataset.d;ui.sheet="task";break;
+  case "edit":ui.editId=id;ui.sheet="task";break;
+  case "sheet":ui.sheet=v;if(v==="report")ui.reportWhy="";if(v==="rate")ui.rate=5;break;
+  case "toggle":var t=S.tasks.find(function(x){return x.id===id});if(t){t.done=!t.done;save()}break;
+  case "savetask":var title=field("t-title");if(!title){toast("Add a name for the task.");return}
+    var obj={title:title,time:field("t-time"),day:field("t-day")||todayK(),kid:field("t-kid"),essential:document.getElementById("t-ess").checked},ex=S.tasks.find(function(x){return x.id===ui.editId});
+    if(ex)Object.assign(ex,obj);else S.tasks.push(Object.assign({id:uid(),done:false},obj));
+    ui.sheet=null;ui.editId=null;save();toast("Saved");break;
+  case "deltask":S.tasks=S.tasks.filter(function(x){return x.id!==ui.editId});ui.sheet=null;ui.editId=null;save();toast("Task deleted");break;
+  case "addtpl":seedTasks([v]);save();ui.sheet=null;toast(TEMPLATES[v].label+" added to today");break;
+  case "doloverload":var tk=todayK(),tm=addDays(tk,1),mv=S.tasks.filter(function(x){return x.day===tk&&!x.done&&!x.essential});S.lean[tk]=mv.map(function(x){return x.id});mv.forEach(function(x){x.day=tm});ui.sheet=null;save();toast("Lean day on");break;
+  case "undolean":var k2=todayK();(S.lean[k2]||[]).forEach(function(i){var t2=S.tasks.find(function(x){return x.id===i});if(t2)t2.day=k2});delete S.lean[k2];save();toast("Tasks restored");break;
+  case "esetup":ui.screen="e-setup";ui.estep=b.dataset.step?+b.dataset.step:0;break;
+  case "eclose":ui.screen=null;break;
+  case "eprev":ui.estep=Math.max(0,ui.estep-1);break;
+  case "enext":if(ui.estep<4){ui.estep++}else{S.emergency.done=true;if(S.emergency.checkinOn&&!S.emergency.lastCheckIn)S.emergency.lastCheckIn=Date.now();ui.screen=null;save();pubCheckin();toast("Emergency card ready")}break;
+  case "addcontact":var cn=field("c-name"),cp=field("c-phone");if(!cn||!cp){toast("Add a name and a phone number.");return}S.emergency.contacts.push({name:cn,phone:cp,role:field("c-role")});save();break;
+  case "rmcontact":S.emergency.contacts.splice(+b.dataset.i,1);save();break;
+  case "addline":S.emergency.plan=(S.emergency.plan?S.emergency.plan+"\n":"")+b.dataset.t;save();break;
+  case "copycard":copy(cardText());return;
+  case "checkin":S.emergency.lastCheckIn=Date.now();save();pubCheckin();toast("Checked in");break;
+  case "buddy":var bi=S.emergency.buddies.indexOf(id);if(bi>=0)S.emergency.buddies.splice(bi,1);else S.emergency.buddies.push(id);save();pubCheckin();break;
+  case "screen":if((v==="request"||v==="offer")&&needMember())break;ui.ask=null;ui.screen=v;break;
+  case "back":ui.screen=null;ui.sheet=null;ui.ask=null;break;
+  case "pledge":S.safetyOk=b.checked;save();pubMember();break;
+  case "submitjoin":if(needDb())return;var mj=Object.assign({},C.members[MY]||{},{name:S.profile.name.trim(),area:S.profile.area.trim(),kids:ageLine(S.profile.kids),support:S.profile.support,pledge:true,requestedAt:Date.now()});C.members[MY]=mj;put("members/"+MY,mj);toast("Submitted for approval");break;
+  case "ask":if(needMember())break;ui.ask={id:b.dataset.o,name:who(b.dataset.o)};ui.screen="request";break;
+  case "postreq":if(needMember())break;var cr=+field("r-cr")||1;if(cr>balanceOf(C,MY)){toast("Not enough credits. Help a neighbour to earn more.");return}if(!field("r-when")){toast("Choose when you need help.");return}
+    var ts=new Date(field("r-when")).getTime(),its=myItems();its.push({id:uid(),kind:"request",type:field("r-type"),when:new Date(ts).toLocaleString(undefined,{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}),whenTs:ts,credits:cr,note:field("r-note"),status:"open",toId:ui.ask?ui.ask.id:null,createdAt:Date.now()});
+    setItems(its);ui.ask=null;ui.screen=null;toast("Request posted");break;
+  case "postoffer":if(needMember())break;var what=[].slice.call(document.querySelectorAll("#o-what input:checked")).map(function(i){return i.value});if(!what.length){toast("Pick at least one thing you can do.");return}
+    var its2=myItems();its2.push({id:uid(),kind:"offer",what:what.join(", "),when:field("o-when")||"Flexible",status:"open",createdAt:Date.now()});setItems(its2);ui.screen=null;toast("Offer posted");break;
+  case "cancelpost":setItems(myItems().filter(function(i){return i.id!==id}));toast("Removed");break;
+  case "help":if(needMember())break;var cl=myClaims();cl.push({id:id,ownerId:b.dataset.o,at:Date.now()});setClaims(cl);toast("Offered. "+who(b.dataset.o)+" will choose a helper.");break;
+  case "unhelp":setClaims(myClaims().map(function(c){return c.id===id&&c.ownerId===b.dataset.o?Object.assign({},c,{withdrawn:true}):c}));toast("Withdrawn");break;
+  case "accept":var ai=myItems(),ait=ai.find(function(i){return i.id===id});if(!ait)break;if(ait.credits>balanceOf(C,MY)){toast("Not enough credits to accept.");return}
+    ait.status="matched";ait.helperId=b.dataset.h;ait.matchedAt=Date.now();setItems(ai);ui.thread={o:MY,id:id};ui.screen="chat";toast("Matched with "+who(b.dataset.h));break;
+  case "chat":ui.thread={o:b.dataset.o,id:id};ui.screen="chat";break;
+  case "quick":case "send":var ti=threadItem(),txt=a==="quick"?b.dataset.t:field("m-in");if(!ti||!txt)return;
+    if(txt.replace(/\D/g,"").length>=7){toast("Phone numbers can't be shared here yet.");return}
+    var tm2=Object.assign({},(C.msgs[MY]||{}).t||{}),key=ti.owner+"-"+ti.id,arr=(tm2[key]||[]).concat({at:Date.now(),text:txt}).slice(-80);tm2[key]=arr;setMsgs(tm2);break;
+  case "star":ui.rate=+v;break;
+  case "complete":var ci=threadItem();if(!ci||ci.owner!==MY)break;var cits=myItems(),cit=cits.find(function(i){return i.id===ci.id});cit.status="done";cit.rating=ui.rate;cit.doneAt=Date.now();setItems(cits);ui.sheet=null;ui.screen=null;toast("Done. Credits updated.");break;
+  case "why":ui.reportWhy=v;break;
+  case "doreport":var ri=threadItem();if(!ri)break;var ro=ri.owner===MY?ri.helperId:ri.owner;S.blockedIds.push(ro);save();
+    var rep=((C.reports[MY]||{}).items||[]).concat({about:ro,why:ui.reportWhy,at:Date.now()});C.reports[MY]={items:rep};put("reports/"+MY,{items:rep});
+    if(ri.owner===MY){var rl=myItems(),rit=rl.find(function(i){return i.id===ri.id});if(rit){rit.status="cancelled";setItems(rl)}}
+    ui.sheet=null;ui.screen=null;toast("Reported and blocked");break;
+  case "approve":DB.doc("approved/"+id).set({at:Date.now(),by:MY}).catch(fail);break;
+  case "revoke":DB.doc("approved/"+id).delete().catch(fail);break;
+  case "block":DB.doc("blocked/"+id).set({at:Date.now(),by:MY}).catch(fail);break;
+  case "unblock":DB.doc("blocked/"+id).delete().catch(fail);break;
+  case "doreset":S=blank();if(DB){["members","posts","claims","msgs","checkins"].forEach(function(c){delete C[c][MY];DB.doc(c+"/"+MY).delete().catch(fail)})}save();try{localStorage.removeItem(KEY)}catch(e2){}ui.sheet=null;ui.screen=null;ui.tab="today";ui.ostep=0;break;
+  }
+  render()});
+function onInput(e){var t=e.target;
+  if(t.dataset.kid!==undefined){S.profile.kids[+t.dataset.kid][t.dataset.f]=t.value;save();pubMember();return}
+  if(t.dataset.bind){setPath(t.dataset.bind,t.type==="checkbox"?t.checked:t.value);save();if(t.dataset.bind.indexOf("profile.")===0)pubMember();if(t.dataset.bind==="profile.support"&&e.type==="change")render()}}
+document.addEventListener("input",onInput);document.addEventListener("change",onInput);
+document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="m-in"){e.preventDefault();var b=document.querySelector('[data-act="send"]');if(b)b.click()}});
+document.addEventListener("focusout",function(){if(ui.pending){setTimeout(function(){var a=document.activeElement;if(!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))&&ui.sheet!=="task"){ui.pending=false;render()}},80)}});
+boot();
+})();
+</script>
